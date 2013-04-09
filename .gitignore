@@ -1,6 +1,10 @@
 *.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+*.o
+*.a
+*.so
+*.exe
+*.log
+.metadata
+/build/
+/bin/
+/debug/
