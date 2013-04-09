@@ -37,28 +37,14 @@ public class HMacHelperTest {
         final HMacHelper mac = HMacHelper.getInstance();
         final byte[] result = mac.sign("11111111111111111111111111111".getBytes());
         long s = System.currentTimeMillis();
-        Thread[] ts = new Thread[10];
-        for (int k = 0; k < ts.length; k++) {
-            ts[k] = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 300000; i > 0; i--) {
-                        HMacHelper m = HMacHelper.getInstance();
-                        byte[] r = m.sign("11111111111111111111111111111".getBytes());
-                        assertArrayEquals(result, r);
-                    }
-                }
-            });
-            ts[k].start();
-        }
-        for (int k = 0; k < ts.length; k++) {
-            try {
-                ts[k].join();
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+        MultithreadTestHelper.runInMultithread(10, 30000, new Runnable() {
+            @Override
+            public void run() {
+                HMacHelper m = HMacHelper.getInstance();
+                byte[] r = m.sign("11111111111111111111111111111".getBytes());
+                assertArrayEquals(result, r);
             }
-        }
+        });
         System.out.println(System.currentTimeMillis() - s);
     }
 
@@ -66,12 +52,12 @@ public class HMacHelperTest {
     public void testPerformance() {
         long s = System.currentTimeMillis();
         HMacHelper mac = HMacHelper.getInstance();
-        for (int i = 3000000; i > 0; i--) {
+        for (int i = 300000; i > 0; i--) {
             mac.sign("11111111111111111111111111111".getBytes());
         }
         System.out.println(System.currentTimeMillis() - s);
         s = System.currentTimeMillis();
-        for (int i = 3000000; i > 0; i--) {
+        for (int i = 300000; i > 0; i--) {
 
             HMacHelper m = HMacHelper.getInstance();
 
@@ -79,5 +65,4 @@ public class HMacHelperTest {
         }
         System.out.println(System.currentTimeMillis() - s);
     }
-
 }

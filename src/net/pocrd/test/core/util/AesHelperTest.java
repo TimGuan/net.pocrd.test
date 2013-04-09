@@ -105,30 +105,15 @@ public class AesHelperTest {
             sb.append(i);
         }
         final byte[] content = sb.toString().getBytes();
-        Thread[] threads = new Thread[5];
-        for (int i = 0; i < threads.length; i++) {
-            threads[i] = new Thread(new Runnable() {
+        MultithreadTestHelper.runInMultithread(5, 10000, new Runnable() {
 
-                @Override
-                public void run() {
-                    for (int i = 0; i < 10000; i++) {
-                        byte[] bs = aes.encrypt(content);
-                        assertTrue(bs.length == ((content.length + 15) / 16) * 16);
-                        byte[] c2 = aes.decrypt(bs);
-                        assertTrue(Arrays.equals(content, c2));
-                    }
-                }
-            });
-        }
-        for (int i = 0; i < threads.length; i++) {
-            threads[i].start();
-        }
-        for (int i = 0; i < threads.length; i++) {
-            try {
-                threads[i].join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            @Override
+            public void run() {
+                byte[] bs = aes.encrypt(content);
+                assertTrue(bs.length == ((content.length + 15) / 16) * 16);
+                byte[] c2 = aes.decrypt(bs);
+                assertTrue(Arrays.equals(content, c2));
             }
-        }
+        });
     }
 }
