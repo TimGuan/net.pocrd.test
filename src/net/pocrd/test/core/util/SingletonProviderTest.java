@@ -28,6 +28,7 @@ public class SingletonProviderTest {
             TestClass2 c = SingletonProvider.getSingleton(TestClass2.class);
             assertEquals(c, SingletonProvider.getSingleton(TestClass2.class));
         } catch (Exception e) {
+            e.printStackTrace();
             return;
         }
         fail("should create failed.");

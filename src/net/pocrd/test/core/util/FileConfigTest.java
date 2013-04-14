@@ -5,15 +5,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import net.pocrd.util.FileConfig;
+import net.pocrd.util.ConfigUtil;
 
 import org.junit.Test;
 
 public class FileConfigTest {
-    @XmlRootElement
     public static class Config {
         public static Config Instance;
 
@@ -21,7 +19,7 @@ public class FileConfigTest {
 
         static {
             try {
-                Instance = FileConfig.load("test.config", Config.class);
+                Instance = ConfigUtil.load("test.config", Config.class);
             } catch (Exception e) {
 
             }
@@ -44,10 +42,10 @@ public class FileConfigTest {
         c.f4 = "1111";
 
         String path = new File(".").getAbsolutePath() + "/test.config";
-        FileConfig.save(path, c);
+        ConfigUtil.save(path, c);
         assertTrue(new File(path).exists());
 
-        Config c2 = FileConfig.load("test.config", Config.class);
+        Config c2 = ConfigUtil.load("test.config", Config.class);
         
         assertTrue(c2 != null);
         assertTrue(c.f1.equals(c2.f1));

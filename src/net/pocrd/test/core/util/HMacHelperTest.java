@@ -13,34 +13,30 @@ import org.junit.Test;
  */
 public class HMacHelperTest {
 
-    static {
-        HMacHelper.setMacPwd("0123456789");
-    }
-
     @Test
     public void testHMacHelper() {
-        HMacHelper mac = HMacHelper.getInstance();
+        HMacHelper mac = HMacHelper.getThreadLocalInstance("0123456789");
         assertNotNull(mac);
     }
 
     @Test
     public void testVerify() {
-        HMacHelper mac1 = HMacHelper.getInstance();
+        HMacHelper mac1 = HMacHelper.getThreadLocalInstance("0123456789");
         assertNotNull(mac1);
-        HMacHelper mac2 = HMacHelper.getInstance();
+        HMacHelper mac2 = HMacHelper.getThreadLocalInstance("0123456789");
         assertNotNull(mac2);
         assertArrayEquals(mac1.sign("11111111111111111111111111111".getBytes()), mac2.sign("11111111111111111111111111111".getBytes()));
     }
 
     @Test
     public void testMultiThread() {
-        final HMacHelper mac = HMacHelper.getInstance();
+        final HMacHelper mac = HMacHelper.getThreadLocalInstance("0123456789");
         final byte[] result = mac.sign("11111111111111111111111111111".getBytes());
         long s = System.currentTimeMillis();
         MultithreadTestHelper.runInMultithread(10, 30000, new Runnable() {
             @Override
             public void run() {
-                HMacHelper m = HMacHelper.getInstance();
+                HMacHelper m = HMacHelper.getThreadLocalInstance("0123456789");
                 byte[] r = m.sign("11111111111111111111111111111".getBytes());
                 assertArrayEquals(result, r);
             }
@@ -51,7 +47,7 @@ public class HMacHelperTest {
     @Test
     public void testPerformance() {
         long s = System.currentTimeMillis();
-        HMacHelper mac = HMacHelper.getInstance();
+        HMacHelper mac = HMacHelper.getThreadLocalInstance("0123456789");
         for (int i = 300000; i > 0; i--) {
             mac.sign("11111111111111111111111111111".getBytes());
         }
@@ -59,7 +55,7 @@ public class HMacHelperTest {
         s = System.currentTimeMillis();
         for (int i = 300000; i > 0; i--) {
 
-            HMacHelper m = HMacHelper.getInstance();
+            HMacHelper m = HMacHelper.getThreadLocalInstance("0123456789");
 
             m.sign("11111111111111111111111111111".getBytes());
         }

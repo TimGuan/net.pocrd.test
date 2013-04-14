@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import net.pocrd.define.ConstField;
 import net.pocrd.util.AesHelper;
+import net.pocrd.util.Base64Util;
 
 import org.junit.Test;
 
@@ -17,8 +18,9 @@ public class AesHelperTest {
         byte[] key = AesHelper.randomKey(256);
         AesHelper aes = new AesHelper(key, null);
         assertTrue(aes != null);
+        System.out.println(Base64Util.encodeToString(key));
     }
-
+    
     @Test
     public void testEncrypt() {
         {
