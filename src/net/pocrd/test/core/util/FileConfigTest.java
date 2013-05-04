@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import net.pocrd.util.ConfigUtil;
@@ -12,6 +13,7 @@ import net.pocrd.util.ConfigUtil;
 import org.junit.Test;
 
 public class FileConfigTest {
+    @XmlRootElement
     public static class Config {
         public static Config Instance;
 

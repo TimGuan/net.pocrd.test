@@ -6,8 +6,6 @@ import net.pocrd.annotation.ApiParameter;
 import net.pocrd.annotation.HttpApi;
 import net.pocrd.core.ApiManager;
 import net.pocrd.define.SecurityType;
-import net.pocrd.entity.ReturnCode;
-import net.pocrd.entity.ReturnCodeException;
 
 import org.junit.Test;
 
@@ -84,9 +82,12 @@ public class HttpApiUtilTest {
     public void test() {
         try {
             ApiManager manager = new ApiManager("net.pocrd.test.core.util");
+            {
             Object result1 = manager.processRequest("test.Test1", new String[] { "123", "456" });
             System.out.println(result1);
             assertEquals(String.valueOf(123 + 456), result1);
+            }
+            {
             Object result2 = manager.processRequest("test.Test2", 
                     new String[] { 
                     "true", null, "true", null, 
@@ -100,8 +101,22 @@ public class HttpApiUtilTest {
                     "end", null });
             System.out.println(result2);
             assertEquals("result true true true true -128 127 -128 -128 c c c z 32767 32767 32767 -32768 12345678 2147483647 12345678 -2147483648 12345678900 9223372036854775807 12345678900 -9223372036854775808 3.14159 3.4028235E38 3.14159 1.4E-45 3.14159265 1.7976931348623157E308 3.14159265 4.9E-324 end xxx ", result2);
-
-
+            }
+            {
+            Object result3 = manager.processRequest("test.Test2", 
+                    new String[] { 
+                    "true", "false", "true", "false", 
+                    "-128", "127", "-128", "127", 
+                    String.valueOf((int)'c'), String.valueOf((int)'z'), String.valueOf((int)'c'), String.valueOf((int)'x'), 
+                    "32767", "-32768", "32767", "-32768", 
+                    "12345678", "87654321", "12345678", "87654321", 
+                    "12345678900", "999876543210", "12345678900", "999876543210", 
+                    "3.14159", "1.234567", "3.14159", "1.234567", 
+                    "3.14159265", "1.23456789", "3.14159265", "1.23456789", 
+                    "end", "xxx" });
+            System.out.println(result3);
+            assertEquals("result true false true false -128 127 -128 127 c z c x 32767 -32768 32767 -32768 12345678 87654321 12345678 87654321 12345678900 999876543210 12345678900 999876543210 3.14159 1.234567 3.14159 1.234567 3.14159265 1.23456789 3.14159265 1.23456789 end xxx ", result3);
+            }
         } catch (SecurityException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

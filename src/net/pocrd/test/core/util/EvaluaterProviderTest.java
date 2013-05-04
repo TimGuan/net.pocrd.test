@@ -1,12 +1,18 @@
 package net.pocrd.test.core.util;
 
 import static org.junit.Assert.assertEquals;
+import net.pocrd.define.Evaluater;
 import net.pocrd.entity.CallerInfo;
-import net.pocrd.util.ValueConvertor;
+import net.pocrd.util.EvaluaterProvider;
 
 import org.junit.Test;
 
-public class ValueConvertorTest {
+public class EvaluaterProviderTest {
+    private static Evaluater<A,B> evaluater;
+    static{
+        evaluater = EvaluaterProvider.getEvaluater(A.class, B.class);
+    }
+    
     public static class A {
         public String     name;
         public int        age;
@@ -22,7 +28,7 @@ public class ValueConvertorTest {
     }
 
     @Test
-    public void testValueConvertor() {
+    public void testEvaluater() {
         A a = new A();
         B b = new B();
         b.name = "123";
@@ -37,7 +43,7 @@ public class ValueConvertorTest {
         b.caller.securityLevel = 333;
         b.caller.sn = Long.MAX_VALUE;
         b.caller.uid = Long.MAX_VALUE;
-        ValueConvertor.evaluate(a, b);
+        evaluater.evaluate(a, b);
         assertEquals(a.name, b.name);
         assertEquals(a.age, b.age);
         assertEquals(a.expire, b.expire);
