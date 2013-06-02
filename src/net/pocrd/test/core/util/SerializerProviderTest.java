@@ -9,11 +9,9 @@ import java.io.IOException;
 
 import net.pocrd.define.ConstField;
 import net.pocrd.test.core.util.TestObj.Test_Obj;
-import net.pocrd.test.core.util.TestString.Test_String;
 import net.pocrd.util.SerializerProvider;
 
 import org.junit.Test;
-import org.junit.internal.runners.statements.Fail;
 
 public class SerializerProviderTest {
 
