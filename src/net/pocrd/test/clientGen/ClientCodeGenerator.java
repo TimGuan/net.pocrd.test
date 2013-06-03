@@ -21,10 +21,11 @@ public class ClientCodeGenerator {
         HttpGet get = new HttpGet("http://localhost:8080/info.api");
         try {
             HttpResponse resp = client.execute(get);
-            String string = EntityUtils.toString(resp.getEntity());
+            String str = EntityUtils.toString(resp.getEntity());
             InputStream xslt = ClientCodeGenerator.class.getClassLoader().getResourceAsStream("java.xslt");
             TransformerFactory f = TransformerFactory.newInstance();
             Transformer trans = f.newTransformer(new StreamSource(xslt));
+            System.out.println(str);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
