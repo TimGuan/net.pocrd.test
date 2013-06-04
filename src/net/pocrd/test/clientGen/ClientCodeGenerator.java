@@ -2,8 +2,11 @@ package net.pocrd.test.clientGen;
 
 import java.io.InputStream;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.http.HttpResponse;
@@ -14,6 +17,8 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 public class ClientCodeGenerator {
     public static void main(String[] args) {
@@ -25,6 +30,12 @@ public class ClientCodeGenerator {
             InputStream xslt = ClientCodeGenerator.class.getClassLoader().getResourceAsStream("java.xslt");
             TransformerFactory f = TransformerFactory.newInstance();
             Transformer trans = f.newTransformer(new StreamSource(xslt));
+            DOMSource dom = new DOMSource();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse("http://localhost:8080/info.api");
+            NodeList nodes = doc.getElementsByTagName("apiInfoList/apiInfo");
+            
             System.out.println(str);
         } catch (Exception e) {
             e.printStackTrace();
