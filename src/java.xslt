@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:template match="/apiInfoList/apiInfo">
-    <xsl:apply-templates select="."/>
-  </xsl:template>
-  <xsl:template name="ApiMethodInfo" match="/apiInfoList/apiInfo">
+  <xsl:template name="ApiMethodInfo" match="apiInfo">
     <xsl:variable name="methodName" select="methodName"/>
     <xsl:variable name="parameterList">
       <xsl:for-each select="parameterInfos/parameterInfo">
@@ -23,19 +20,15 @@ import net.pocrd.client.apiEntity.<xsl:call-template name="getEntityName"><xsl:w
  * @author org.pocrd.ClientCodeGenerator
  *
  */
-public class <xsl:call-template name="string-replace-all">
-               <xsl:with-param name="text" select="methodName" />
-               <xsl:with-param name="replace" select="'.'" />
-               <xsl:with-param name="by" select="'_'" />
+public class <xsl:call-template name="getClassName">
+               <xsl:with-param name="name" select="methodName" />
              </xsl:call-template> extends BaseRequest<xsl:text disable-output-escaping="yes"><![CDATA[<]]></xsl:text><xsl:call-template name="getLastName"><xsl:with-param name="name" select="returnType"/></xsl:call-template><xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> {
     /**
      * 当前请求的构造函数，以下参数为必填参数<xsl:for-each select="parameterInfos/parameterInfo"><xsl:call-template name="RequiredParameterComment"><xsl:with-param name="methodName" select="$methodName"/></xsl:call-template></xsl:for-each>
      */
-    public <xsl:call-template name="string-replace-all">
-             <xsl:with-param name="text" select="methodName" />
-             <xsl:with-param name="replace" select="'.'" />
-             <xsl:with-param name="by" select="'_'" />
-           </xsl:call-template>(<xsl:choose><xsl:when test="contains($parameterList, ', ')"><xsl:value-of select="substring($parameterList,0,string-length($parameterList)-1)"/>
+    public <xsl:call-template name="getClassName">
+               <xsl:with-param name="name" select="methodName" />
+             </xsl:call-template>(<xsl:choose><xsl:when test="contains($parameterList, ', ')"><xsl:value-of select="substring($parameterList,0,string-length($parameterList)-1)"/>
              </xsl:when>
            </xsl:choose>) {
         super("<xsl:value-of select="translate(methodName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"></xsl:value-of>", SecurityType.<xsl:value-of select="securityLevel"></xsl:value-of>, null, false);
@@ -52,8 +45,8 @@ public class <xsl:call-template name="string-replace-all">
     }
     
     @Override
-    protected <xsl:call-template name="getLastName"><xsl:with-param name="name" select="returnType"/></xsl:call-template> getResult(InputStream stream) {<xsl:text disable-output-escaping="yes">
-        if (response.length <![CDATA[>]]> 0) {</xsl:text>
+    protected <xsl:call-template name="getLastName"><xsl:with-param name="name" select="returnType"/></xsl:call-template> getResult(InputStream stream) {
+    <xsl:text disable-output-escaping="yes">    if (response.length <![CDATA[>]]> 0) {</xsl:text>
             try {
                 return <xsl:call-template name="getLastName"><xsl:with-param name="name" select="returnType"/></xsl:call-template>.parseFrom(stream);
             } catch (Exception e) {
@@ -63,6 +56,12 @@ public class <xsl:call-template name="string-replace-all">
         return null;
     }
 }
+  </xsl:template>
+    <xsl:template name ="getClassName">
+    <xsl:param name="name"></xsl:param>
+    <xsl:variable name="first" select="substring-before($name, '.')"/>
+    <xsl:variable name="second" select="substring-after($name, '.')"/>
+    <xsl:value-of select="translate(substring($first, 1, 1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/><xsl:value-of select="substring($first, 2)"/>_<xsl:value-of select="translate(substring($second, 1, 1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/><xsl:value-of select="substring($second, 2)"/>
   </xsl:template>
   <xsl:template name ="getEntityName">
     <xsl:param name="name"></xsl:param>
@@ -80,9 +79,9 @@ public class <xsl:call-template name="string-replace-all">
   <xsl:template name ="getLastName">
     <xsl:param name="name"/>
     <xsl:choose>
-      <xsl:when test="contains($name, '.')">
+      <xsl:when test="contains($name, '$')">
         <xsl:call-template name="getLastName">
-          <xsl:with-param name="name" select="substring-after($name, '.')"/>
+          <xsl:with-param name="name" select="substring-after($name, '$')"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
