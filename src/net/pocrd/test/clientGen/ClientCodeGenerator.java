@@ -37,6 +37,7 @@ public class ClientCodeGenerator {
             TransformerFactory f = TransformerFactory.newInstance();
             Transformer trans = f.newTransformer(new StreamSource(xslt));
             trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+
             System.out.println(str);
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("http://localhost:8080/info.api");
             XPath path = XPathFactory.newInstance().newXPath();
