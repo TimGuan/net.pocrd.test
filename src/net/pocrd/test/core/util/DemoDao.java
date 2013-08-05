@@ -57,7 +57,7 @@ public class DemoDao<T> {
 	public int[] getDemoEntity(
 			@CacheParameter(type = CacheKeyType.Normal)int[] condition,
 			@CacheParameter(type = CacheKeyType.Normal)DemoEntity[] obj,
-			@CacheParameter(type = CacheKeyType.Normal)Test test,
+			@CacheParameter(type = CacheKeyType.Normal)TestEnum test,
 			@CacheParameter(type = CacheKeyType.Normal)int valueType
 			) {
 		//System.out.println("Success 3");
@@ -92,7 +92,7 @@ public class DemoDao<T> {
 	}
 	
 	
-	public enum Test{
+	public enum TestEnum{
 		a,
 		b
 	}
