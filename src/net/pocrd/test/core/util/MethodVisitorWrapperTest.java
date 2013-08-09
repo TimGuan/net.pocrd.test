@@ -3,39 +3,39 @@ package net.pocrd.test.core.util;
 import java.lang.reflect.Method;
 
 import net.pocrd.core.PocClassLoader;
-import net.pocrd.util.MethodVisitorHelper;
+import net.pocrd.util.MethodVisitorWrapper;
 
 import org.junit.Test;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 
-public class MethodVisitorHelperTest implements Opcodes {
+public class MethodVisitorWrapperTest implements Opcodes {
     @Test
     public void TestGen() throws Exception {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-        MethodVisitorHelper mv;
-        cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, "net/pocrd/test/core/util/MethodVisitorTest", null, "java/lang/Object", null);
-        cw.visitSource("MethodVisitorTest.java", null);
+        MethodVisitorWrapper mv;
+        cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, "net/pocrd/test/core/util/MethodVisitorWrapperTest", null, "java/lang/Object", null);
+        cw.visitSource("MethodVisitorWrapperTest.java", null);
         {
-            mv = new MethodVisitorHelper(ASM4, cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null));
+            mv = new MethodVisitorWrapper(cw, ACC_PUBLIC, "<init>", "()V", null, null);
             mv.visitCode();
             Label l0 = new Label();
-            mv.declareArgs(false, null);
+            // mv.declareArgs(false, null);
             mv.visitLabel(l0);
             mv.loadArg(0);
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
             mv.visitInsn(RETURN);
             Label l1 = new Label();
             mv.visitLabel(l1);
-            mv.visitLocalVariable("this", "Lnet/pocrd/test/core/util/MethodVisitorTest;", null, l0, l1, 0);
+            mv.visitLocalVariable("this", "Lnet/pocrd/test/core/util/MethodVisitorWrapperTest;", null, l0, l1, 0);
             mv.visitMaxs(1, 1);
             mv.visitEnd();
         }
         {
-            mv = new MethodVisitorHelper(ASM4, cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "staticMain", "([Ljava/lang/String;)V", null, null));
+            mv = new MethodVisitorWrapper(cw, ACC_PUBLIC + ACC_STATIC, "staticMain", "([Ljava/lang/String;)V", null, null);
             mv.visitCode();
-            mv.declareArgs(true, new Class<?>[] { String[].class });
+            // mv.declareArgs(true, new Class<?>[] { String[].class });
             mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
             mv.visitLdcInsn("Hello world!");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
@@ -44,9 +44,9 @@ public class MethodVisitorHelperTest implements Opcodes {
             mv.visitEnd();
         }
         {
-            mv = new MethodVisitorHelper(ASM4, cw.visitMethod(ACC_PUBLIC, "main", "(Ljava/lang/String;)V", null, null));
+            mv = new MethodVisitorWrapper(cw, ACC_PUBLIC, "main", "(Ljava/lang/String;)V", null, null);
             mv.visitCode();
-            mv.declareArgs(false,  new Class<?>[] { String.class });
+            // mv.declareArgs(false, new Class<?>[] { String.class });
             mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
             mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
             mv.visitInsn(DUP);
@@ -63,16 +63,16 @@ public class MethodVisitorHelperTest implements Opcodes {
             mv.visitEnd();
         }
         cw.visitEnd();
-//        FileOutputStream output = new FileOutputStream("./bin/MethodVisitorTest.class");
-//        byte[] content = cw.toByteArray();
-//        output.write(content, 0, content.length);
-//        output.close();
+        // FileOutputStream output = new FileOutputStream("./bin/MethodVisitorTest.class");
+        // byte[] content = cw.toByteArray();
+        // output.write(content, 0, content.length);
+        // output.close();
         PocClassLoader pocClassLoader = new PocClassLoader(Thread.currentThread().getContextClassLoader());
-        Class<?> testClass = pocClassLoader.defineClass("net.pocrd.test.core.util.MethodVisitorTest", cw.toByteArray());
-        Method main = testClass.getMethod("main", String.class);//invoke method of instance
-        main.invoke(testClass.newInstance(),"Tim.Guan");
-        Method staticMain = testClass.getMethod("staticMain", String[].class);//invoke static 
-        staticMain.invoke(null, new Object[]{new String[]{}});
+        Class<?> testClass = pocClassLoader.defineClass("net.pocrd.test.core.util.MethodVisitorWrapperTest", cw.toByteArray());
+        Method main = testClass.getMethod("main", String.class);// invoke method of instance
+        main.invoke(testClass.newInstance(), "Tim.Guan");
+        Method staticMain = testClass.getMethod("staticMain", String[].class);// invoke static
+        staticMain.invoke(null, new Object[] { new String[] {} });
     }
 
 }
