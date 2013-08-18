@@ -15,7 +15,12 @@ public class CacheProviderTest {
                     DemoDao<?> d = CacheProvider.getSingleton(DemoDao.class);
                     int[] i = new int[2];
                     d.getDemoEntity(i, null, TestEnum.a, 0);
-                    d.getDemoEntity(0);
+                    try {
+                        d.getDemoEntity(0);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                     d.getDemoEntity(0, 0);
                     d.getDemoEntity(0, null, true, (byte) 0, (short) 0, '0', 0, 0, 0);
                     d.getDemoEntity(null);
