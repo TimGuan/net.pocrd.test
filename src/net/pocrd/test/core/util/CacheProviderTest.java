@@ -4,7 +4,6 @@ import net.pocrd.test.core.util.DemoDao.TestEnum;
 import net.pocrd.util.CacheProvider;
 
 import org.junit.Test;
-
 public class CacheProviderTest {
     @Test
     public void Test(){        

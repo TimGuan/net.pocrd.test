@@ -19,5 +19,9 @@
 	<classpathentry kind="lib" path="lib/asm-tree-4.1.jar"/>
 	<classpathentry kind="lib" path="lib/asm-util-4.1.jar"/>
 	<classpathentry kind="lib" path="lib/asm-xml-4.1.jar"/>
+	<classpathentry kind="lib" path="lib/tomcat-juli.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-commercial-5.1.26-bin.jar"/>
+	<classpathentry kind="lib" path="lib/c3p0-0.9.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/tomcat-jdbc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
